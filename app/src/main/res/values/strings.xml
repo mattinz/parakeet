@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Parakeet - Voice Synthesizer</string>
+
+    <string name="aws_cognito_pool_id">CHANGEME</string>
+</resources>
