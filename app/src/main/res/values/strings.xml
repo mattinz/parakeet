@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Parakeet - Voice Synthesizer</string>
 
-    <string name="aws_cognito_pool_id">CHANGEME</string>
+    <string name="aws_cognito_pool_id">us-east-2:2cdb14ef-d3c2-416a-9cd7-aff623971dd7</string>
 </resources>
