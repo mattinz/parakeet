@@ -1,5 +1,7 @@
 package mattin.parakeet;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.StrictMode;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import java.net.URL;
 import java.util.List;
@@ -68,6 +71,26 @@ public class VoiceSynthActivity extends AppCompatActivity {
     }
 
     private void setLoadingScreenVisibility(boolean isVisible) {
-
+        final View loadingBackground = findViewById(R.id.loading_background);
+        final ProgressBar loadingSpinner = findViewById(R.id.loading_spinner);
+        if(isVisible) {
+            loadingBackground.setVisibility(View.VISIBLE);
+            loadingSpinner.setVisibility(View.VISIBLE);
+        } else {
+            loadingBackground.animate().alpha(0f).setDuration(250).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    loadingBackground.setVisibility(View.GONE);
+                }
+            });
+            loadingSpinner.animate().alpha(0f).setDuration(250).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    loadingSpinner.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 }
