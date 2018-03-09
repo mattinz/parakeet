@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.net.URL;
@@ -24,8 +25,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
         setContentView(R.layout.activity_voice_synthesizer);
 
         final RecyclerView voiceInfoRecyclerView = findViewById(R.id.voiceInfoRecyclerView);
-        voiceInfoRecyclerView.setHasFixedSize(true);
-        voiceInfoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setupVoiceInfoRecyclerView(voiceInfoRecyclerView);
 
         final VoiceSynthViewModel viewModel = ViewModelProviders.of(this).get(VoiceSynthViewModel.class);
         setViewModelObservers(viewModel, voiceInfoRecyclerView);
@@ -41,7 +41,12 @@ public class VoiceSynthActivity extends AppCompatActivity {
         });
     }
 
-    private void setViewModelObservers(VoiceSynthViewModel viewModel, final RecyclerView voiceInfoRecyclerView) {
+    private void setupVoiceInfoRecyclerView(RecyclerView voiceInfoRecyclerView) {
+        voiceInfoRecyclerView.setHasFixedSize(true);
+        voiceInfoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void setViewModelObservers(final VoiceSynthViewModel viewModel, final RecyclerView voiceInfoRecyclerView) {
         viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean isLoading) {
@@ -52,7 +57,12 @@ public class VoiceSynthActivity extends AppCompatActivity {
         viewModel.getVoiceInfoList().observe(this, new Observer<List<VoiceInfo>>() {
             @Override
             public void onChanged(@Nullable List<VoiceInfo> voiceInfos) {
-                voiceInfoRecyclerView.setAdapter(new VoiceInfoRecyclerAdapter(voiceInfos));
+                voiceInfoRecyclerView.setAdapter(new VoiceInfoRecyclerAdapter(voiceInfos, new IRecyclerViewClickListener() {
+                    @Override
+                    public void onItemClick(int adapterPosition) {
+                        viewModel.setSelectedVoice(adapterPosition);
+                    }
+                }));
             }
         });
     }
