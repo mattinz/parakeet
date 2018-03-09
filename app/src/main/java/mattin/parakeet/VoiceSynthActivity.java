@@ -4,20 +4,16 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
-import java.net.URL;
 import java.util.List;
 
 public class VoiceSynthActivity extends AppCompatActivity {
@@ -33,7 +29,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
         final VoiceSynthViewModel viewModel = ViewModelProviders.of(this).get(VoiceSynthViewModel.class);
         setViewModelObservers(viewModel, voiceInfoRecyclerView);
 
-        Button playButton = findViewById(R.id.playButton);
+        Button playButton = findViewById(R.id.start_stop_button);
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
