@@ -1,12 +1,12 @@
 package mattin.parakeet;
 
+import android.content.Context;
 import android.support.annotation.DimenRes;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -16,25 +16,28 @@ import java.util.List;
  * Created by Mattin on 3/7/2018.
  */
 
-public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<VoiceInfoRecyclerAdapter.ViewHolder> {
+public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int TOP_DUMMY_ROW = 0;
+    private static final int VOICE_INFO_ROW = 1;
+    private static final int BOTTOM_DUMMY_ROW = 2;
 
     private IRecyclerViewClickListener clickListener;
     private List<VoiceInfo> voiceInfoList;
     private VoiceInfo selectedVoiceInfo;
-    private ViewHolder selectedViewHolder;
+    private VoiceInfoViewHolder selectedVoiceInfoViewHolder;
     @DimenRes private int topDummyHeight;
     @DimenRes private int bottomDummyHeight;
 
     public VoiceInfoRecyclerAdapter(List<VoiceInfo> voiceInfoList,
-                                    IRecyclerViewClickListener clickListener,
                                     @DimenRes int topDummyHeight,
-                                    @DimenRes int bottomDummyHeight) {
+                                    @DimenRes int bottomDummyHeight,
+                                    IRecyclerViewClickListener clickListener) {
         this.clickListener = clickListener;
         this.voiceInfoList = voiceInfoList;
         this.topDummyHeight = topDummyHeight;
         this.bottomDummyHeight = bottomDummyHeight;
         selectedVoiceInfo = null;
-        selectedViewHolder = null;
+        selectedVoiceInfoViewHolder = null;
 
         //Nulls will represent dummy views
         voiceInfoList.add(0, null);
@@ -43,35 +46,44 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<VoiceInfoRecy
 
     @Override
     public  int getItemViewType(int position) {
-        int viewType = 1;
+        int viewType = VOICE_INFO_ROW;
         if(position == 0) {
-            viewType = 0;
+            viewType = TOP_DUMMY_ROW;
         } else if (position == voiceInfoList.size() - 1) {
-            viewType = 2;
+            viewType = BOTTOM_DUMMY_ROW;
         }
         return viewType;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = null;
-        if(viewType == 0 || viewType == voiceInfoList.size() - 1) {
-            //Get view with heigt topDummyHeight or bottomDummyHeight
+        View itemView;
+        ViewHolder viewHolder;
+        if(viewType == TOP_DUMMY_ROW || viewType == BOTTOM_DUMMY_ROW) {
+            itemView = new View(parent.getContext());
+            viewHolder = new EmptyRowViewHolder(itemView);
         }else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_voice_info, parent, false);
+            viewHolder = new VoiceInfoViewHolder(itemView, null);
         }
-        ViewHolder viewHolder = new ViewHolder(itemView, null);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        VoiceInfo voiceInfo = voiceInfoList.get(position);
-        holder.voiceInfo = voiceInfo;
-        holder.name.setText(voiceInfo.getName());
-        holder.gender.setText(voiceInfo.getGender());
-        holder.language.setText(voiceInfo.getLanguage());
-        holder.radioButton.setChecked(voiceInfo.equals(selectedVoiceInfo));
+        if(holder.getItemViewType() == VOICE_INFO_ROW) {
+            VoiceInfo voiceInfo = voiceInfoList.get(position);
+            VoiceInfoViewHolder viewHolder = (VoiceInfoViewHolder) holder;
+            viewHolder.voiceInfo = voiceInfo;
+            viewHolder.name.setText(voiceInfo.getName());
+            viewHolder.gender.setText(voiceInfo.getGender());
+            viewHolder.language.setText(voiceInfo.getLanguage());
+            viewHolder.radioButton.setChecked(voiceInfo.equals(selectedVoiceInfo));
+        } else {
+            @DimenRes int rowHeight = holder.getItemViewType() == TOP_DUMMY_ROW ? topDummyHeight : bottomDummyHeight;
+            EmptyRowViewHolder viewHolder = (EmptyRowViewHolder) holder;
+            viewHolder.setViewHeight(rowHeight);
+        }
     }
 
     @Override
@@ -79,14 +91,14 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<VoiceInfoRecy
         return voiceInfoList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class VoiceInfoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         VoiceInfo voiceInfo;
         TextView name;
         TextView gender;
         TextView language;
         RadioButton radioButton;
 
-        public ViewHolder(View itemView, VoiceInfo voiceInfo) {
+        public VoiceInfoViewHolder(View itemView, VoiceInfo voiceInfo) {
             super(itemView);
             itemView.setOnClickListener(this);
             this.voiceInfo = voiceInfo;
@@ -98,13 +110,28 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<VoiceInfoRecy
 
         @Override
         public void onClick(View v) {
-            if(selectedViewHolder != null) {
-                selectedViewHolder.radioButton.setChecked(false);
+            if(selectedVoiceInfoViewHolder != null) {
+                selectedVoiceInfoViewHolder.radioButton.setChecked(false);
             }
-            selectedViewHolder = ViewHolder.this;
+            selectedVoiceInfoViewHolder = VoiceInfoViewHolder.this;
             selectedVoiceInfo = voiceInfo;
             radioButton.setChecked(true);
             clickListener.onItemClick(getAdapterPosition());
+        }
+    }
+
+    private class EmptyRowViewHolder extends ViewHolder {
+        public View view;
+
+        public EmptyRowViewHolder(View itemView) {
+            super(itemView);
+            view = itemView;
+        }
+
+        public void setViewHeight(@DimenRes int heightRes) {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = view.getContext().getResources().getDimensionPixelSize(heightRes);
+            view.setLayoutParams(new ViewGroup.LayoutParams(width, height));
         }
     }
 }

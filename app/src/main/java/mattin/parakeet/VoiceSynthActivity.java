@@ -56,12 +56,16 @@ public class VoiceSynthActivity extends AppCompatActivity {
         viewModel.getVoiceInfoList().observe(this, new Observer<List<VoiceInfo>>() {
             @Override
             public void onChanged(@Nullable List<VoiceInfo> voiceInfos) {
-                voiceInfoRecyclerView.setAdapter(new VoiceInfoRecyclerAdapter(voiceInfos, new IRecyclerViewClickListener() {
-                    @Override
-                    public void onItemClick(int adapterPosition) {
-                        viewModel.setSelectedVoice(adapterPosition);
-                    }
-                }));
+                VoiceInfoRecyclerAdapter adapter = new VoiceInfoRecyclerAdapter(voiceInfos,
+                        R.dimen.voice_list_top_dummy_row_height,
+                        R.dimen.voice_list_bottom_dummy_row_height,
+                        new IRecyclerViewClickListener() {
+                            @Override
+                            public void onItemClick(int adapterPosition) {
+                                viewModel.setSelectedVoice(adapterPosition);
+                            }
+                        });
+                voiceInfoRecyclerView.setAdapter(adapter);
             }
         });
     }
