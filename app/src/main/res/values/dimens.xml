@@ -4,4 +4,5 @@
     <dimen name="card_view_elevation">8dp</dimen>
     <dimen name="voice_list_top_dummy_row_height">72dp</dimen>
     <dimen name="voice_list_bottom_dummy_row_height">228dp</dimen>
+    <dimen name="divider_height">2dp</dimen>
 </resources>

@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -43,6 +44,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
     private void setupVoiceInfoRecyclerView(RecyclerView voiceInfoRecyclerView) {
         voiceInfoRecyclerView.setHasFixedSize(true);
         voiceInfoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        voiceInfoRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
     private void setViewModelObservers(final VoiceSynthViewModel viewModel, final RecyclerView voiceInfoRecyclerView) {
