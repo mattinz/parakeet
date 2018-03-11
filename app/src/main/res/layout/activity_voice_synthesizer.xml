@@ -87,36 +87,47 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/messageInput"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:ems="10"
-                android:gravity="top"
-                android:hint="Message"
-                android:inputType="textMultiLine"
-                app:layout_constraintBottom_toTopOf="@+id/start_stop_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/messageInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp"
+                    android:ems="10"
+                    android:gravity="top"
+                    android:hint="Message"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintBottom_toTopOf="@+id/start_stop_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="Hello, World!" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="36dp"
                 android:orientation="horizontal">
 
-                <Button
+                <ImageButton
                     android:id="@+id/microphone_button"
-                    android:layout_width="wrap_content"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Mic" />
+                    android:tint="@color/color_detail_light"
+                    app:srcCompat="@drawable/ic_mic_black" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/start_stop_button"
-                    android:layout_width="wrap_content"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Start" />
+                    android:tint="@color/color_detail_light"
+                    app:srcCompat="@drawable/ic_play_arrow_black" />
 
             </LinearLayout>
         </LinearLayout>
