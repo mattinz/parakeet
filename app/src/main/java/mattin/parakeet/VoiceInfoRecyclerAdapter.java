@@ -41,17 +41,22 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         selectedVoiceInfoViewHolder = null;
 
         //Nulls will represent dummy views
-        voiceInfoList.add(0, null);
-        voiceInfoList.add(voiceInfoList.size(), null);
+        if(!this.voiceInfoList.isEmpty() && this.voiceInfoList.get(0) != null) {
+            this.voiceInfoList.add(0, null);
+            this.voiceInfoList.add(this.voiceInfoList.size(), null);
+        }
     }
 
     @Override
     public  int getItemViewType(int position) {
         int viewType = VOICE_INFO_ROW;
-        if(position == 0) {
+        /*if(position == 0) {
             viewType = TOP_DUMMY_ROW;
         } else if (position == voiceInfoList.size() - 1) {
             viewType = BOTTOM_DUMMY_ROW;
+        }*/
+        if(voiceInfoList.get(position) == null) {
+            viewType = position == 0 ? TOP_DUMMY_ROW : BOTTOM_DUMMY_ROW;
         }
         return viewType;
     }
@@ -83,6 +88,8 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 viewHolder.radioButton.setChecked(voiceInfo.equals(selectedVoiceInfo));
                 if (position == 0 || position == voiceInfoList.size() - 2) {
                     viewHolder.divider.setVisibility(View.GONE);
+                } else {
+                    viewHolder.divider.setVisibility(View.VISIBLE);
                 }
             }
         } else {
@@ -124,7 +131,7 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             selectedVoiceInfoViewHolder = VoiceInfoViewHolder.this;
             selectedVoiceInfo = voiceInfo;
             radioButton.setChecked(true);
-            clickListener.onItemClick(getAdapterPosition());
+            clickListener.onItemClick(getAdapterPosition() - 1);
         }
     }
 
