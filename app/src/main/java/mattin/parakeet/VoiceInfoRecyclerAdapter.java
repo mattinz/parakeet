@@ -85,7 +85,7 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 viewHolder.name.setText(voiceInfo.getName());
                 viewHolder.gender.setText(voiceInfo.getGender());
                 viewHolder.language.setText(voiceInfo.getLanguage());
-                viewHolder.radioButton.setChecked(voiceInfo.equals(selectedVoiceInfo));
+                viewHolder.selectionIndicator.setVisibility(voiceInfo.equals(selectedVoiceInfo) ? View.VISIBLE : View.INVISIBLE);
                 if (position == 0 || position == voiceInfoList.size() - 2) {
                     viewHolder.divider.setVisibility(View.GONE);
                 } else {
@@ -109,7 +109,7 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         final TextView name;
         final TextView gender;
         final TextView language;
-        final RadioButton radioButton;
+        final View selectionIndicator;
         final  View divider;
 
         public VoiceInfoViewHolder(View itemView, VoiceInfo voiceInfo) {
@@ -119,18 +119,18 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             name = itemView.findViewById(R.id.voice_name);
             gender = itemView.findViewById(R.id.gender_output);
             language = itemView.findViewById(R.id.language_output);
-            radioButton = itemView.findViewById(R.id.voice_info_item_radio_button);
+            selectionIndicator = itemView.findViewById(R.id.selection_indicator);
             divider = itemView.findViewById(R.id.divider);
         }
 
         @Override
         public void onClick(View v) {
             if(selectedVoiceInfoViewHolder != null) {
-                selectedVoiceInfoViewHolder.radioButton.setChecked(false);
+                selectedVoiceInfoViewHolder.selectionIndicator.setVisibility(View.INVISIBLE);
             }
             selectedVoiceInfoViewHolder = VoiceInfoViewHolder.this;
             selectedVoiceInfo = voiceInfo;
-            radioButton.setChecked(true);
+            selectionIndicator.setVisibility(View.VISIBLE);
             clickListener.onItemClick(getAdapterPosition() - 1);
         }
     }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:visibility="visible"
         app:cardCornerRadius="@dimen/card_view_corner_radius"
         app:cardElevation="@dimen/card_view_elevation"
@@ -26,7 +26,7 @@
             android:layout_height="48dp"
             android:ems="10"
             android:hint="Search"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textFilter"
             android:selectAllOnFocus="false"
             android:singleLine="false" />
     </android.support.v7.widget.CardView>
@@ -72,7 +72,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         android:visibility="visible"
@@ -90,7 +90,7 @@
             <EditText
                 android:id="@+id/messageInput"
                 android:layout_width="match_parent"
-                android:layout_height="144dp"
+                android:layout_height="96dp"
                 android:ems="10"
                 android:gravity="top"
                 android:hint="Message"
@@ -101,7 +101,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="48dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -117,13 +117,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Start" />
-
-                <Button
-                    android:id="@+id/star_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Star" />
 
             </LinearLayout>
         </LinearLayout>

@@ -9,78 +9,67 @@
         android:id="@+id/voice_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textSize="18sp"
+        android:includeFontPadding="false"
+        android:text="NAME"
+        android:textSize="@dimen/large_font_size"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Gender:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/voice_name"
-        app:layout_constraintTop_toBottomOf="@+id/voice_name" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <TextView
-        android:id="@+id/gender_output"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Language:"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/gender_output" />
+    <View
+        android:id="@+id/selection_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/divider_gradient"
+        android:backgroundTint="@color/colorAccent"
+        android:elevation="@dimen/selector_view_elevation"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/voice_name" />
 
     <TextView
         android:id="@+id/language_output"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="TextView"
+        android:layout_marginTop="2dp"
+        android:text="LANGUAGE"
+        android:textAlignment="center"
+        android:textColor="@color/color_detail_very_light"
+        android:textSize="@dimen/small_font_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selection_indicator" />
 
-    <RadioButton
-        android:id="@+id/voice_info_item_radio_button"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/gender_output"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/voice_name"
+        android:layout_marginTop="2dp"
+        android:text="GENDER"
+        android:textAlignment="center"
+        android:textColor="@color/color_detail_very_light"
+        android:textSize="@dimen/small_font_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/voice_name" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/language_output" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="@dimen/divider_height"
+        android:layout_marginTop="8dp"
         android:background="@drawable/divider_gradient"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/color_detail_very_very_light"
+        android:elevation="@dimen/divider_view_elevation"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gender_output" />
 </android.support.constraint.ConstraintLayout>
