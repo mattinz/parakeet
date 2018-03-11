@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,9 +18,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class VoiceSynthActivity extends AppCompatActivity {
+
+    private VoiceSynthViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
         final RecyclerView voiceInfoRecyclerView = findViewById(R.id.voiceInfoRecyclerView);
         setupVoiceInfoRecyclerView(voiceInfoRecyclerView);
 
-        final VoiceSynthViewModel viewModel = ViewModelProviders.of(this).get(VoiceSynthViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(VoiceSynthViewModel.class);
         setViewModelObservers(viewModel, voiceInfoRecyclerView);
 
         ImageButton playButton = findViewById(R.id.start_stop_button);
@@ -40,6 +46,27 @@ public class VoiceSynthActivity extends AppCompatActivity {
                 viewModel.playMessageWithVoice();
             }
         });
+
+        ImageButton micButton = findViewById(R.id.microphone_button);
+        micButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM); //If this is needed, set it as the device's locale
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_listener_prompt));
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK && data != null) {
+            List<String> messagesList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String message = messagesList.get(0);
+            ((EditText) findViewById(R.id.messageInput)).setText(message);
+            viewModel.playMessageWithVoice();
+        }
     }
 
     private void setupVoiceInfoRecyclerView(RecyclerView voiceInfoRecyclerView) {

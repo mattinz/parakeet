@@ -3,6 +3,8 @@
 
     <string name="aws_cognito_pool_id">us-east-2:2cdb14ef-d3c2-416a-9cd7-aff623971dd7</string>
 
+    <string name="speech_listener_prompt">Say a phrase!</string>
+
     <!-- These are here to resolve a layout error caused by a bug in TextInputLayout -->
     <item name="visible" type="id"/>
     <item name="masked" type="id"/>
