@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -85,7 +86,11 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
                 viewHolder.name.setText(voiceInfo.getName());
                 viewHolder.gender.setText(voiceInfo.getGender());
                 viewHolder.language.setText(voiceInfo.getLanguage());
-                viewHolder.selectionIndicator.setVisibility(voiceInfo.equals(selectedVoiceInfo) ? View.VISIBLE : View.INVISIBLE);
+
+                boolean isSelected = voiceInfo.equals(selectedVoiceInfo);
+                viewHolder.selectionIndicator.setVisibility(isSelected ? View.VISIBLE : View.INVISIBLE);
+                selectedVoiceInfoViewHolder = isSelected ? viewHolder : selectedVoiceInfoViewHolder;
+
                 if (position == 0 || position == voiceInfoList.size() - 2) {
                     viewHolder.divider.setVisibility(View.GONE);
                 } else {
@@ -102,6 +107,17 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public int getItemCount() {
         return voiceInfoList.size();
+    }
+
+    public void setSelectedVoiceInfo(int index) {
+        if(voiceInfoList != null && !voiceInfoList.isEmpty()) {
+            if (selectedVoiceInfoViewHolder != null) {
+                selectedVoiceInfoViewHolder.selectionIndicator.setVisibility(View.INVISIBLE);
+            }
+            selectedVoiceInfoViewHolder = null;
+            selectedVoiceInfo = voiceInfoList.get(index + 1);
+            notifyDataSetChanged();
+        }
     }
 
     private class VoiceInfoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

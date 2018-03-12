@@ -25,7 +25,7 @@ public class VoiceSynthViewModel extends AndroidViewModel {
 
     private MutableLiveData<Boolean> isLoading;
     private MutableLiveData<List<VoiceInfo>> voiceInfoList;
-    private VoiceInfo selectedVoice;
+    private int selectedVoiceIndex;
     private String currentMessage;
 
     public VoiceSynthViewModel(@NonNull Application application) {
@@ -38,19 +38,19 @@ public class VoiceSynthViewModel extends AndroidViewModel {
                 List<VoiceInfo> voiceInfos = synthesizer.getVoiceInfoList();
                 if(!voiceInfos.isEmpty()) {
                     voiceInfoList.setValue(voiceInfos);
-                    selectedVoice = voiceInfos.get(0);
                 }
             }
         });
         audioStreamMediaPlayer = new AudioStreamMediaPlayer();
-        selectedVoice = null;
+        selectedVoiceIndex = 0;
         currentMessage = "";
     }
 
     public boolean playMessageWithVoice() {
         boolean didPlay = false;
-        if(selectedVoice != null && !TextUtils.isEmpty(currentMessage)) {
-            URL voiceStream = synthesizer.getSynthesizedVoiceStream(currentMessage, selectedVoice);
+        List<VoiceInfo> list = voiceInfoList.getValue();
+        if(list != null && list.get(selectedVoiceIndex) != null && !TextUtils.isEmpty(currentMessage)) {
+            URL voiceStream = synthesizer.getSynthesizedVoiceStream(currentMessage, list.get(selectedVoiceIndex));
             if(voiceStream != null) {
                 audioStreamMediaPlayer.playFromStream(voiceStream);
                 didPlay = true;
@@ -75,9 +75,13 @@ public class VoiceSynthViewModel extends AndroidViewModel {
         return voiceInfoList;
     }
 
+    public int getSelectedVoiceIndex() {
+        return selectedVoiceIndex;
+    }
+
     public void setSelectedVoice(int index) {
-        if(voiceInfoList != null && !voiceInfoList.getValue().isEmpty()) {
-            selectedVoice = voiceInfoList.getValue().get(index);
+        if(index >= 0) {
+            selectedVoiceIndex = index;
         }
     }
 

@@ -95,6 +95,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
                                 viewModel.setSelectedVoice(adapterPosition);
                             }
                         });
+                adapter.setSelectedVoiceInfo(viewModel.getSelectedVoiceIndex());
                 voiceInfoRecyclerView.setAdapter(adapter);
             }
         });
