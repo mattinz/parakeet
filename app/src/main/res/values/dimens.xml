@@ -7,7 +7,8 @@
     <dimen name="voice_list_top_dummy_row_height">68dp</dimen>
     <dimen name="voice_list_bottom_dummy_row_height">172dp</dimen>
     <dimen name="divider_height">1dp</dimen>
+    <dimen name="selection_indicator_height">1dp</dimen>
 
-    <dimen name="large_font_size">18sp</dimen>
+    <dimen name="large_font_size">18dp</dimen>
     <dimen name="small_font_size">14dp</dimen>
 </resources>

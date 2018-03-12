@@ -22,7 +22,7 @@
     <View
         android:id="@+id/selection_indicator"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
+        android:layout_height="@dimen/selection_indicator_height"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="2dp"
@@ -51,7 +51,6 @@
         android:id="@+id/gender_output"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:text="GENDER"
         android:textAlignment="center"
         android:textColor="@color/color_detail_very_light"
