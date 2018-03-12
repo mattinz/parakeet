@@ -57,6 +57,8 @@ public class VoiceSynthActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0);
             }
         });
+
+        ((EditText) findViewById(R.id.messageInput)).setText(viewModel.getCurrentMessage());
     }
 
     @Override
@@ -65,6 +67,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
             List<String> messagesList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             String message = messagesList.get(0);
             ((EditText) findViewById(R.id.messageInput)).setText(message);
+            viewModel.setMessage(message);
             viewModel.playMessageWithVoice();
         }
     }

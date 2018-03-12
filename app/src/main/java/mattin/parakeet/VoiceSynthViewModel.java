@@ -43,7 +43,7 @@ public class VoiceSynthViewModel extends AndroidViewModel {
         });
         audioStreamMediaPlayer = new AudioStreamMediaPlayer();
         selectedVoiceIndex = 0;
-        currentMessage = "";
+        currentMessage = application.getString(R.string.default_message);
     }
 
     public boolean playMessageWithVoice() {
@@ -77,6 +77,10 @@ public class VoiceSynthViewModel extends AndroidViewModel {
 
     public int getSelectedVoiceIndex() {
         return selectedVoiceIndex;
+    }
+
+    public String getCurrentMessage() {
+        return currentMessage;
     }
 
     public void setSelectedVoice(int index) {
