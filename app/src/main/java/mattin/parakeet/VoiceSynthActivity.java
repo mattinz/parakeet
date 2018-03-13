@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
+import android.support.annotation.DimenRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class VoiceSynthActivity extends AppCompatActivity {
 
@@ -70,9 +73,10 @@ public class VoiceSynthActivity extends AppCompatActivity {
         viewModel.getVoiceInfoList().observe(this, new Observer<List<VoiceInfo>>() {
             @Override
             public void onChanged(@Nullable List<VoiceInfo> voiceInfos) {
-                VoiceInfoRecyclerAdapter adapter = new VoiceInfoRecyclerAdapter(voiceInfos,
-                        R.dimen.voice_list_top_dummy_row_height,
-                        R.dimen.voice_list_bottom_dummy_row_height,
+                boolean isPortrait = getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT;
+                @DimenRes int topDummyHeight = isPortrait ? R.dimen.voice_list_top_dummy_row_height : R.dimen.voice_list_dummy_row_height_landscape;
+                @DimenRes int bottomDummyHeight = isPortrait ? R.dimen.voice_list_bottom_dummy_row_height : R.dimen.voice_list_dummy_row_height_landscape;
+                VoiceInfoRecyclerAdapter adapter = new VoiceInfoRecyclerAdapter(voiceInfos, topDummyHeight, bottomDummyHeight,
                         new IRecyclerViewClickListener() {
                             @Override
                             public void onItemClick(int adapterPosition) {
