@@ -5,6 +5,7 @@
 
     <string name="default_message">Hello world!</string>
     <string name="speech_listener_prompt">Say a phrase!</string>
+    <string name="search_no_results">No results.\nTry changing your search query.</string>
 
     <!-- These are here to resolve a layout error caused by a bug in TextInputLayout -->
     <item name="visible" type="id"/>

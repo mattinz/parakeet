@@ -4,14 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.amazonaws.util.StringUtils;
-
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,9 +20,11 @@ public class VoiceSynthViewModel extends AndroidViewModel {
     private AudioStreamMediaPlayer audioStreamMediaPlayer;
 
     private MutableLiveData<Boolean> isLoading;
-    private MutableLiveData<List<VoiceInfo>> voiceInfoList;
+    private MutableLiveData<List<VoiceInfo>> voiceInfoResultList;
+    private List<VoiceInfo> voiceInfoList;
     private int selectedVoiceIndex;
     private String currentMessage;
+    private String currentSearch;
 
     public VoiceSynthViewModel(@NonNull Application application) {
         super(application);
@@ -37,18 +35,20 @@ public class VoiceSynthViewModel extends AndroidViewModel {
                 isLoading.setValue(false);
                 List<VoiceInfo> voiceInfos = synthesizer.getVoiceInfoList();
                 if(!voiceInfos.isEmpty()) {
-                    voiceInfoList.setValue(voiceInfos);
+                    voiceInfoList = voiceInfos;
+                    setSearchQuery(currentSearch);
                 }
             }
         });
         audioStreamMediaPlayer = new AudioStreamMediaPlayer();
         selectedVoiceIndex = 0;
         currentMessage = application.getString(R.string.default_message);
+        currentSearch = "";
     }
 
     public boolean playMessageWithVoice() {
         boolean didPlay = false;
-        List<VoiceInfo> list = voiceInfoList.getValue();
+        List<VoiceInfo> list = voiceInfoResultList.getValue();
         if(list != null && list.get(selectedVoiceIndex) != null && !TextUtils.isEmpty(currentMessage)) {
             URL voiceStream = synthesizer.getSynthesizedVoiceStream(currentMessage, list.get(selectedVoiceIndex));
             if(voiceStream != null) {
@@ -68,11 +68,11 @@ public class VoiceSynthViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<VoiceInfo>> getVoiceInfoList() {
-        if(voiceInfoList == null) {
-            voiceInfoList = new MutableLiveData<>();
-            voiceInfoList.setValue(new LinkedList<VoiceInfo>());
+        if(voiceInfoResultList == null) {
+            voiceInfoResultList = new MutableLiveData<>();
+            voiceInfoResultList.setValue(new LinkedList<VoiceInfo>());
         }
-        return voiceInfoList;
+        return voiceInfoResultList;
     }
 
     public int getSelectedVoiceIndex() {
@@ -81,6 +81,10 @@ public class VoiceSynthViewModel extends AndroidViewModel {
 
     public String getCurrentMessage() {
         return currentMessage;
+    }
+
+    public String getCurrentSearch() {
+        return currentSearch;
     }
 
     public void setSelectedVoice(int index) {
@@ -92,6 +96,24 @@ public class VoiceSynthViewModel extends AndroidViewModel {
     public void setMessage(String message) {
         if(!TextUtils.isEmpty(message)) {
             currentMessage = message;
+        }
+    }
+
+    public void setSearchQuery(String query) {
+        currentSearch = query.trim();
+        if(TextUtils.isEmpty(currentSearch)) {
+            voiceInfoResultList.setValue(voiceInfoList);
+        } else {
+            List<VoiceInfo> results = new LinkedList<>();
+            results.clear();
+            for(VoiceInfo voiceInfo : voiceInfoList) {
+                if(voiceInfo.getName().toLowerCase().contains(currentSearch.toLowerCase())
+                        || voiceInfo.getLanguage().toLowerCase().contains(currentSearch.toLowerCase())
+                        || voiceInfo.getGender().toLowerCase().contains(currentSearch.toLowerCase())) {
+                    results.add(voiceInfo);
+                }
+            }
+            voiceInfoResultList.setValue(results);
         }
     }
 }

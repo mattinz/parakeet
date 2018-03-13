@@ -51,11 +51,6 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public  int getItemViewType(int position) {
         int viewType = VOICE_INFO_ROW;
-        /*if(position == 0) {
-            viewType = TOP_DUMMY_ROW;
-        } else if (position == voiceInfoList.size() - 1) {
-            viewType = BOTTOM_DUMMY_ROW;
-        }*/
         if(voiceInfoList.get(position) == null) {
             viewType = position == 0 ? TOP_DUMMY_ROW : BOTTOM_DUMMY_ROW;
         }
@@ -110,7 +105,7 @@ public class VoiceInfoRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void setSelectedVoiceInfo(int index) {
-        if(voiceInfoList != null && !voiceInfoList.isEmpty()) {
+        if(voiceInfoList != null && !voiceInfoList.isEmpty() && index + 1 < voiceInfoList.size()) {
             if (selectedVoiceInfoViewHolder != null) {
                 selectedVoiceInfoViewHolder.selectionIndicator.setVisibility(View.INVISIBLE);
             }

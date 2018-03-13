@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,30 +37,9 @@ public class VoiceSynthActivity extends AppCompatActivity {
         setupVoiceInfoRecyclerView(voiceInfoRecyclerView);
 
         viewModel = ViewModelProviders.of(this).get(VoiceSynthViewModel.class);
-        setViewModelObservers(viewModel, voiceInfoRecyclerView);
-
-        ImageButton playButton = findViewById(R.id.start_stop_button);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText messageInput = VoiceSynthActivity.this.findViewById(R.id.messageInput);
-                viewModel.setMessage(messageInput.getText().toString());
-                viewModel.playMessageWithVoice();
-            }
-        });
-
-        ImageButton micButton = findViewById(R.id.microphone_button);
-        micButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM); //If this is needed, set it as the device's locale
-                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_listener_prompt));
-                startActivityForResult(intent, 0);
-            }
-        });
-
-        ((EditText) findViewById(R.id.messageInput)).setText(viewModel.getCurrentMessage());
+        setViewModelObservers(voiceInfoRecyclerView);
+        setButtonClickListeners();
+        setupEditTexts();
     }
 
     @Override
@@ -78,7 +59,7 @@ public class VoiceSynthActivity extends AppCompatActivity {
         voiceInfoRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
     }
 
-    private void setViewModelObservers(final VoiceSynthViewModel viewModel, final RecyclerView voiceInfoRecyclerView) {
+    private void setViewModelObservers(final RecyclerView voiceInfoRecyclerView) {
         viewModel.getIsLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean isLoading) {
@@ -99,7 +80,54 @@ public class VoiceSynthActivity extends AppCompatActivity {
                             }
                         });
                 adapter.setSelectedVoiceInfo(viewModel.getSelectedVoiceIndex());
+                setNoResultsPromptVisibility(voiceInfos.isEmpty());
                 voiceInfoRecyclerView.setAdapter(adapter);
+            }
+        });
+    }
+
+    private void setButtonClickListeners() {
+        ImageButton playButton = findViewById(R.id.start_stop_button);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText messageInput = VoiceSynthActivity.this.findViewById(R.id.messageInput);
+                viewModel.setMessage(messageInput.getText().toString());
+                viewModel.playMessageWithVoice();
+            }
+        });
+
+        ImageButton micButton = findViewById(R.id.microphone_button);
+        micButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech_listener_prompt));
+                startActivityForResult(intent, 0);
+            }
+        });
+    }
+
+    private void setupEditTexts() {
+        ((EditText) findViewById(R.id.messageInput)).setText(viewModel.getCurrentMessage());
+
+        EditText searchInput = findViewById(R.id.search_input);
+        searchInput.setText(viewModel.getCurrentSearch());
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                viewModel.setSearchQuery(editable.toString());
             }
         });
     }
@@ -126,5 +154,9 @@ public class VoiceSynthActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void setNoResultsPromptVisibility(boolean isVisible) {
+        findViewById(R.id.no_search_results_prompt).setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
     }
 }
